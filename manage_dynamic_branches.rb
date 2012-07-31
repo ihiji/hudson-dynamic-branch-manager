@@ -31,18 +31,18 @@ class BranchJobManager
     #branches
     #find the list of branches we're interested in.
     #TODO: detect when the git command has problems.  checking rc of the pipeline won't work - grep may return non-zero.
-    bs = `git ls-remote #{git_repo_url} | grep "refs/heads" | awk '{print $2}' | sed 's%refs/heads/%%' | grep "^rc-\\|^hotfix\\|^testme"`.split
+    bs = `git ls-remote #{git_repo_url} | grep "refs/heads" | awk '{print $2}' | sed 's%refs/heads/%%' | grep -v "^master"`.split
     bs2 = bs.map{|b| b.sub("origin/",'')} #in shortest, comparable forms
     #dirs (existing jobs) #note: instead we could use the api: https://jenkins.example.com/api/json
     ds = Dir.glob("/var/lib/#{ci_type}/jobs/#{project_name}_*/").map {|d| File.basename d }
-    ds2 = ds.map{|d| d.sub(project_name + "_", '')}.select{ |x| x.start_with?("hotfix") || x.start_with?("rc") || x.start_with?("testme")} #shortest form
+    ds2 = ds.map{|d| d.sub(project_name + "_", '')}.select{ |x| !x.end_with?("master") } #shortest form
     to_rem = ds2 - bs2
     to_add = bs2 - ds2
     return to_add, to_rem
   end
   def create_job_from_branch(project_name, simple_branch)
     job_name = "#{project_name}_#{simple_branch}"
-    puts "will create #{job_name} from #{project_name}_develop, using branch: #{simple_branch}"
+    puts "will create #{job_name} from #{project_name}_master, using branch: #{simple_branch}"
     exec_or_fail "./add_job.sh #{project_name} #{simple_branch}"
   end
 
