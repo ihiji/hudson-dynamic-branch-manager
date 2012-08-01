@@ -11,7 +11,7 @@ job_name=${project_name}_$branch
 #TODO: remove certain things from job names, such as / characters, as job name will be used as dir name.
 
 #copy the #{project_name}_develop job config, substituting origin/$branch where we had develop.
-sed "s%master%origin/${branch}%" ~/jobs/${project_name}_master/config.xml > /tmp/newconfig.xml
+sed "s%master%origin/${branch}%" ~/jobs/${project_name}_template/config.xml > /tmp/newconfig.xml
 #create this job
 < /tmp/newconfig.xml java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080 create-job $job_name
 java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080 build $job_name

@@ -35,7 +35,7 @@ class BranchJobManager
     bs2 = bs.map{|b| b.sub("origin/",'')} #in shortest, comparable forms
     #dirs (existing jobs) #note: instead we could use the api: https://jenkins.example.com/api/json
     ds = Dir.glob("/var/lib/#{ci_type}/jobs/#{project_name}_*/").map {|d| File.basename d }
-    ds2 = ds.map{|d| d.sub(project_name + "_", '')}.select{ |x| !x.end_with?("master") } #shortest form
+    ds2 = ds.map{|d| d.sub(project_name + "_", '')}.select{ |x| !x.end_with?("master") | !x.end_with?("template") } #shortest form
     to_rem = ds2 - bs2
     to_add = bs2 - ds2
     return to_add, to_rem
