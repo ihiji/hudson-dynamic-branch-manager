@@ -12,6 +12,7 @@ job_name=${project_name}_$branch
 
 #copy the #{project_name}_develop job config, substituting origin/$branch where we had develop.
 sed "s%master%${branch}%" ~/jobs/${project_name}_template/config.xml > /tmp/newconfig.xml
+sed -i  -e "s%  <disabled>true</disabled>%  <disabled>false</disabled>%" /tmp/newconfig.xml
 #cp  ~/jobs/${project_name}_template/config.xml /tmp/newconfig.xml
 #create this job
 < /tmp/newconfig.xml java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080 create-job $job_name
