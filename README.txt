@@ -1,3 +1,5 @@
+### Archived 20200114 by randibus
+
 Dynamic Branch Manager for Hudson and Jenkins
 =============================================
 
